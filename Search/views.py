@@ -100,6 +100,30 @@ def edx(request):
 		return Response(json.loads(r.content))
 
 @api_view(['GET'])
+def harvardx(request):
+	# http://127.0.0.1:8000/search/udemy/?search=introduction%20to%20computer%20science
+	# http://127.0.0.1:8000/search/udemy/?search=introduction to computer science
+	if request.method == 'GET':
+
+		URL = "https://www.edx.org/api/v1/catalog/search"
+
+		params = {'selected_facets[]': 'transcript_languages_exact:English',
+				'query': request.GET["search"],
+				'partner': 'edx',
+				'content_type[]': 'courserun',
+				'selected_facets[]': 'organizations_exact:HarvardX: Harvard University',
+				'page': 1,
+				'page_size': 10}
+
+		print(request.GET)
+
+		r=requests.get(URL, params=params)
+		print(r.url)
+
+		return Response(json.loads(r.content))
+
+# https://www.edx.org/api/v1/catalog/search?selected_facets[]=organizations_exact%3AHarvardX%3A+Harvard+University&page=1&page_size=10&partner=edx&hidden=0&content_type[]=courserun&content_type[]=program&query=biology%22
+@api_view(['GET'])
 def coursera_old(request):
 	# http://127.0.0.1:8000/search/udemy/?search=introduction%20to%20computer%20science
 	# http://127.0.0.1:8000/search/udemy/?search=introduction to computer science
