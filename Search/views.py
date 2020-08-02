@@ -136,7 +136,7 @@ def studios(request):
 		except:
 			pass
 
-		queryset = VideoSerializer(Video.objects.filter(), many=True)
+		queryset = VideoSerializer(Video.objects.filter(description__icontains=keyword).order_by("-timestamp"), many=True)
 		
 		result = queryset.data
 
