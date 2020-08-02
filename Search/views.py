@@ -22,6 +22,8 @@ from utils import *
 
 from urllib.parse import unquote
 
+from .models import *
+
 CLIENT_ID = "mqvXuOXfn3YUjqZNdpPp5zyQXcUnA1GtG8e16zqG"
 CLIENT_SECRET = "7QQfo5YIOPTmUwOtbSeiyrg9UpxYlt4M8Wv1qccxPQRwh947xdFtW2oaI7BavLDRfD1ItEE6FgPa8xQ5sZM6iC9nBl4KwjuuUXTfxZSFwJvRo2g39WZOp7ZCMkxC9hGw"
 AUTHORIZATION_HEADER = "Basic bXF2WHVPWGZuM1lVanFaTmRwUHA1enlRWGNVbkExR3RHOGUxNnpxRzo3UVFmbzVZSU9QVG1Vd090YlNlaXlyZzlVcHhZbHQ0TThXdjFxY2N4UFFSd2g5NDd4ZEZ0VzJvYUk3QmF2TERSZkQxSXRFRTZGZ1BhOHhRNXNaTTZpQzluQmw0S3dqdXVVWFRmeFpTRndKdlJvMmczOVdaT3A3WkNNa3hDOWhHdw=="
@@ -121,6 +123,25 @@ def harvardx(request):
 		print(r.url)
 
 		return Response(json.loads(r.content))
+
+@api_view(['GET'])
+def studios(request):
+	# http://127.0.0.1:8000/search/udemy/?search=introduction%20to%20computer%20science
+	# http://127.0.0.1:8000/search/udemy/?search=introduction to computer science
+	if request.method == 'GET':
+
+		keyword = ""
+		try:
+			keyword = request.GET["search"]
+		except:
+			pass
+
+		queryset = VideoSerializer(Video.objects.filter(), many=True)
+		
+		result = queryset.data
+
+		return Response(result)
+
 
 # https://www.edx.org/api/v1/catalog/search?selected_facets[]=organizations_exact%3AHarvardX%3A+Harvard+University&page=1&page_size=10&partner=edx&hidden=0&content_type[]=courserun&content_type[]=program&query=biology%22
 @api_view(['GET'])
