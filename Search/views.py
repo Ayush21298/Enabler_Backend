@@ -125,7 +125,7 @@ def harvardx(request):
 		return Response(json.loads(r.content))
 
 @api_view(['GET'])
-def studios(request):
+def studios_date(request):
 	# http://127.0.0.1:8000/search/udemy/?search=introduction%20to%20computer%20science
 	# http://127.0.0.1:8000/search/udemy/?search=introduction to computer science
 	if request.method == 'GET':
@@ -136,7 +136,25 @@ def studios(request):
 		except:
 			pass
 
-		queryset = VideoSerializer(Video.objects.filter(description__icontains=keyword).order_by("-timestamp"), many=True)
+		queryset = VideoSerializer(Video.objects.filter(description__contains=keyword).order_by("-timestamp"), many=True)
+		
+		result = queryset.data
+
+		return Response(result)
+
+@api_view(['GET'])
+def studios_name(request):
+	# http://127.0.0.1:8000/search/udemy/?search=introduction%20to%20computer%20science
+	# http://127.0.0.1:8000/search/udemy/?search=introduction to computer science
+	if request.method == 'GET':
+
+		keyword = ""
+		try:
+			keyword = request.GET["search"]
+		except:
+			pass
+
+		queryset = VideoSerializer(Video.objects.filter(description__contains=keyword).order_by("title"), many=True)
 		
 		result = queryset.data
 
